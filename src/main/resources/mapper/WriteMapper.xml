@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.writer.WriteMapper">
+
+    <!--添加用户-->
+    <insert id="addUser" parameterType="com.example.demo.bean.User">
+        insert into user(user_name, age, gender, address, create_time, update_time)
+        values(#{userName}, #{age}, #{gender}, #{address}, now(), now());
+    </insert>
+
+    <!--更新用户信息-->
+    <update id="updateUser" parameterType="com.example.demo.bean.User">
+        update user
+        <set>
+            <if test="userName != null">user_name=#{userName},</if>
+            <if test="age != null">age=#{age},</if>
+            <if test="gender != null">gender=#{gender},</if>
+            <if test="address != null">address=#{address},</if>
+            <if test="true">update_time=now()</if>
+        </set>
+        where user_id =#{userId}
+    </update>
+
+    <!--删除用户-->
+    <delete id="delUser">
+        delete from user where user_id =#{userId}
+    </delete>
+
+    <!--批量删除用户-->
+    <delete id="delUsers">
+        delete from user where user_id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
